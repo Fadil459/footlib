@@ -77,6 +77,7 @@ body {
 
 /* Logo : diamond + wordmark */
 .app-title {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -88,24 +89,37 @@ body {
   user-select: none;
 }
 
+/* Losange doré */
 .app-title::before {
-  content: 'F';
+  content: '';
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
   width: 28px;
   height: 28px;
   background: var(--gold);
+  border-radius: 4px;
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* F droit, superposé sur le losange */
+.app-title::after {
+  content: 'F';
+  position: absolute;
+  left: 0;
+  width: 28px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--navy);
   font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 800;
-  border-radius: 4px;
-  flex-shrink: 0;
   letter-spacing: 0;
+  pointer-events: none;
 }
 
-/* "Lib" en gold */
+/* "Lib" en couleur du losange */
 .app-title span { color: var(--gold); }
 
 /* On remplace le texte brut par span dans l'App — en attendant on stylise directement */
@@ -1253,7 +1267,8 @@ body {
   .app-header { padding: 0 14px; }
   .app-header-inner { height: 52px; }
   .app-title { font-size: 1rem; }
-  .app-title::before { width: 24px; height: 24px; font-size: 11px; }
+  .app-title::before { width: 24px; height: 24px; }
+  .app-title::after { width: 24px; font-size: 11px; }
 
   .app-body { flex-direction: column; padding-bottom: 64px; }
 
