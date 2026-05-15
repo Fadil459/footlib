@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { CATEGORIES, countActiveFilters } from '../utils/filters'
 
 export default function FilterPanel({
@@ -11,12 +12,12 @@ export default function FilterPanel({
 }) {
   const activeCount = countActiveFilters(filters)
 
-  function toggleArrayFilter(key, value) {
-    const current = filters[key]
-    const next = current.includes(value)
-      ? current.filter(v => v !== value)
-      : [...current, value]
-    onUpdate(key, next)
+  function toggleCategory(cat) {
+    const current = filters.categories
+    const next = current.includes(cat)
+      ? current.filter(v => v !== cat)
+      : [...current, cat]
+    onUpdate('categories', next)
   }
 
   return (
@@ -42,58 +43,96 @@ export default function FilterPanel({
         />
       </div>
 
-      <FilterGroup
-        title={t.filterCategory}
-        options={CATEGORIES}
-        selected={filters.categories}
-        onToggle={v => toggleArrayFilter('categories', v)}
-      />
+      {/* Catégories — dropdown multi-select custom */}
+      <div className="filter-group">
+        <h3 className="filter-group-title">{t.filterCategory}</h3>
+        <MultiSelectDropdown
+          options={CATEGORIES}
+          selected={filters.categories}
+          onToggle={toggleCategory}
+          placeholder={t.filterCategory}
+        />
+      </div>
 
-      <FilterGroup
-        title={t.filterType}
-        options={filterOptions.types}
-        selected={filters.types}
-        onToggle={v => toggleArrayFilter('types', v)}
-      />
+      {/* Type — select natif */}
+      <div className="filter-group">
+        <h3 className="filter-group-title">{t.filterType}</h3>
+        <select
+          className="filter-select"
+          value={filters.type}
+          onChange={e => onUpdate('type', e.target.value)}
+        >
+          <option value="">— {t.filterType} —</option>
+          {filterOptions.types.map(opt => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      </div>
 
-      <FilterGroup
-        title={t.filterPhase}
-        options={filterOptions.phases}
-        selected={filters.phases}
-        onToggle={v => toggleArrayFilter('phases', v)}
-      />
+      {/* Phase de jeu — select natif */}
+      <div className="filter-group">
+        <h3 className="filter-group-title">{t.filterPhase}</h3>
+        <select
+          className="filter-select"
+          value={filters.phase}
+          onChange={e => onUpdate('phase', e.target.value)}
+        >
+          <option value="">— {t.filterPhase} —</option>
+          {filterOptions.phases.map(opt => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      </div>
 
-      <FilterGroup
-        title={t.filterPrinciple}
-        options={filterOptions.principes}
-        selected={filters.principes}
-        onToggle={v => toggleArrayFilter('principes', v)}
-      />
+      {/* Principe de jeu — select natif */}
+      <div className="filter-group">
+        <h3 className="filter-group-title">{t.filterPrinciple}</h3>
+        <select
+          className="filter-select"
+          value={filters.principe}
+          onChange={e => onUpdate('principe', e.target.value)}
+        >
+          <option value="">— {t.filterPrinciple} —</option>
+          {filterOptions.principes.map(opt => (
+            <option key={opt} value={opt}>{opt}</option>
+          ))}
+        </select>
+      </div>
     </div>
   )
 }
 
-function FilterGroup({ title, options, selected, onToggle }) {
-  if (options.length === 0) return null
+function MultiSelectDropdown({ options, selected, onToggle, placeholder }) {
+  const [open, setOpen] = useState(false)
+  const label = selected.length === 0
+    ? `— ${placeholder} —`
+    : selected.join(', ')
 
   return (
-    <div className="filter-group">
-      <h3 className="filter-group-title">{title}</h3>
-      <ul className="filter-options-list">
-        {options.map(option => (
-          <li key={option} className="filter-option-item">
-            <label className="filter-option-label">
+    <div className="multiselect">
+      <button
+        className={`multiselect-toggle ${open ? 'multiselect-toggle--open' : ''} ${selected.length > 0 ? 'multiselect-toggle--active' : ''}`}
+        onClick={() => setOpen(o => !o)}
+        type="button"
+      >
+        <span className="multiselect-label">{label}</span>
+        <span className="multiselect-arrow">{open ? '▲' : '▼'}</span>
+      </button>
+
+      {open && (
+        <div className="multiselect-dropdown">
+          {options.map(opt => (
+            <label key={opt} className="multiselect-option">
               <input
                 type="checkbox"
-                className="filter-option-checkbox"
-                checked={selected.includes(option)}
-                onChange={() => onToggle(option)}
+                checked={selected.includes(opt)}
+                onChange={() => onToggle(opt)}
               />
-              <span className="filter-option-text">{option}</span>
+              <span>{opt}</span>
             </label>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

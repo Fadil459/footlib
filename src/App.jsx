@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useExercises } from './hooks/useExercises'
 import { useFavorites } from './hooks/useFavorites'
 import { useSessionPlan } from './hooks/useSessionPlan'
-import { applyFilters, getUniqueValues, INITIAL_FILTERS } from './utils/filters'
+import { applyFilters, getUniqueValues, INITIAL_FILTERS, countActiveFilters } from './utils/filters'
 import { trackExerciseView, trackAddToSession, trackSessionPrint } from './utils/analytics'
 import { useTranslation } from './utils/translations'
 import FilterPanel from './components/FilterPanel'
@@ -26,10 +26,12 @@ export default function App() {
 
   const [filters, setFilters] = useState(INITIAL_FILTERS)
   const [selectedExercise, setSelectedExercise] = useState(null)
-  const [activeTab, setActiveTab] = useState('exercises') // 'exercises' | 'favorites' | 'session' | 'new'
+  const [activeTab, setActiveTab] = useState('exercises')
   const [lang, setLang] = useState('fr')
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
 
   const t = useTranslation(lang)
+  const activeFilterCount = countActiveFilters(filters)
 
   const filterOptions = useMemo(() => ({
     phases: getUniqueValues(exercises, 'phase'),
@@ -74,8 +76,15 @@ export default function App() {
 
   const showSidebar = activeTab !== 'session'
 
+  const totalCount = activeTab === 'favorites'
+    ? exercises.filter(ex => isFavorite(ex.id)).length
+    : activeTab === 'new'
+    ? newExercises.length
+    : exercises.length
+
   return (
     <div className="app">
+      {/* Header */}
       <header className="app-header">
         <div className="app-header-inner">
           <h1 className="app-title">{t.appTitle}</h1>
@@ -87,50 +96,52 @@ export default function App() {
             {lang === 'fr' ? 'EN' : 'FR'}
           </button>
         </div>
-        <nav className="app-tabs">
-          <button
-            className={`app-tab ${activeTab === 'exercises' ? 'app-tab--active' : ''}`}
-            onClick={() => setActiveTab('exercises')}
-          >
+
+        {/* Onglets desktop uniquement */}
+        <nav className="app-tabs desktop-only">
+          <button className={`app-tab ${activeTab === 'exercises' ? 'app-tab--active' : ''}`} onClick={() => setActiveTab('exercises')}>
             {t.tabExercises} ({exercises.length})
           </button>
-          <button
-            className={`app-tab ${activeTab === 'new' ? 'app-tab--active' : ''}`}
-            onClick={() => setActiveTab('new')}
-          >
+          <button className={`app-tab ${activeTab === 'new' ? 'app-tab--active' : ''}`} onClick={() => setActiveTab('new')}>
             {t.tabNew}
           </button>
-          <button
-            className={`app-tab ${activeTab === 'favorites' ? 'app-tab--active' : ''}`}
-            onClick={() => setActiveTab('favorites')}
-          >
+          <button className={`app-tab ${activeTab === 'favorites' ? 'app-tab--active' : ''}`} onClick={() => setActiveTab('favorites')}>
             {t.tabFavorites} ({favorites.length})
           </button>
-          <button
-            className={`app-tab ${activeTab === 'session' ? 'app-tab--active' : ''}`}
-            onClick={() => setActiveTab('session')}
-          >
+          <button className={`app-tab ${activeTab === 'session' ? 'app-tab--active' : ''}`} onClick={() => setActiveTab('session')}>
             {t.tabSession} ({sessionExercises.length})
           </button>
         </nav>
+
+        {/* Barre mobile : titre de l'onglet actif + bouton filtres */}
+        {showSidebar && (
+          <div className="mobile-toolbar mobile-only">
+            <span className="mobile-tab-label">
+              {activeTab === 'exercises' ? `${t.tabExercises} (${exercises.length})`
+                : activeTab === 'new' ? t.tabNew
+                : `${t.tabFavorites} (${favorites.length})`}
+            </span>
+            <button
+              className={`mobile-filter-btn ${activeFilterCount > 0 ? 'mobile-filter-btn--active' : ''}`}
+              onClick={() => setShowMobileFilters(true)}
+            >
+              Filtres {activeFilterCount > 0 && <span className="filter-badge">{activeFilterCount}</span>}
+            </button>
+          </div>
+        )}
       </header>
 
       <div className="app-body">
+        {/* Sidebar desktop */}
         {showSidebar && (
-          <aside className="app-sidebar">
+          <aside className="app-sidebar desktop-only">
             <FilterPanel
               filters={filters}
               filterOptions={filterOptions}
               onUpdate={updateFilter}
               onReset={resetFilters}
               resultCount={filteredExercises.length}
-              totalCount={
-                activeTab === 'favorites'
-                  ? exercises.filter(ex => isFavorite(ex.id)).length
-                  : activeTab === 'new'
-                  ? newExercises.length
-                  : exercises.length
-              }
+              totalCount={totalCount}
               t={t}
             />
           </aside>
@@ -179,6 +190,56 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {/* Bottom nav mobile */}
+      <nav className="bottom-nav mobile-only">
+        <button className={`bottom-nav-item ${activeTab === 'exercises' ? 'bottom-nav-item--active' : ''}`} onClick={() => setActiveTab('exercises')}>
+          <span className="bottom-nav-icon">⚽</span>
+          <span className="bottom-nav-label">{t.tabExercises}</span>
+        </button>
+        <button className={`bottom-nav-item ${activeTab === 'new' ? 'bottom-nav-item--active' : ''}`} onClick={() => setActiveTab('new')}>
+          <span className="bottom-nav-icon">✨</span>
+          <span className="bottom-nav-label">{t.tabNew}</span>
+        </button>
+        <button className={`bottom-nav-item ${activeTab === 'favorites' ? 'bottom-nav-item--active' : ''}`} onClick={() => setActiveTab('favorites')}>
+          <span className="bottom-nav-icon">★</span>
+          <span className="bottom-nav-label">{t.tabFavorites}</span>
+          {favorites.length > 0 && <span className="bottom-nav-badge">{favorites.length}</span>}
+        </button>
+        <button className={`bottom-nav-item ${activeTab === 'session' ? 'bottom-nav-item--active' : ''}`} onClick={() => setActiveTab('session')}>
+          <span className="bottom-nav-icon">📋</span>
+          <span className="bottom-nav-label">{t.tabSession}</span>
+          {sessionExercises.length > 0 && <span className="bottom-nav-badge">{sessionExercises.length}</span>}
+        </button>
+      </nav>
+
+      {/* Bottom sheet filtres mobile */}
+      {showMobileFilters && (
+        <div className="filter-sheet-overlay" onClick={() => setShowMobileFilters(false)}>
+          <div className="filter-sheet" onClick={e => e.stopPropagation()}>
+            <div className="filter-sheet-header">
+              <span className="filter-sheet-title">Filtres</span>
+              <button className="filter-sheet-close" onClick={() => setShowMobileFilters(false)}>✕</button>
+            </div>
+            <div className="filter-sheet-body">
+              <FilterPanel
+                filters={filters}
+                filterOptions={filterOptions}
+                onUpdate={updateFilter}
+                onReset={resetFilters}
+                resultCount={filteredExercises.length}
+                totalCount={totalCount}
+                t={t}
+              />
+            </div>
+            <div className="filter-sheet-footer">
+              <button className="filter-sheet-apply" onClick={() => setShowMobileFilters(false)}>
+                Voir les {filteredExercises.length} exercices
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {selectedExercise && (
         <ExerciseModal

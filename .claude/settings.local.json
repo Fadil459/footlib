@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "mcp__c923b920-08a2-49cd-95a0-ba4f08051c7f__read_file_content",
-      "mcp__c923b920-08a2-49cd-95a0-ba4f08051c7f__search_files"
+      "mcp__c923b920-08a2-49cd-95a0-ba4f08051c7f__search_files",
+      "WebFetch(domain:docs.google.com)"
     ]
   }
 }
