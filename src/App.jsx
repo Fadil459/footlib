@@ -3,6 +3,7 @@ import { useExercises } from './hooks/useExercises'
 import { useFavorites } from './hooks/useFavorites'
 import { useSessionPlan } from './hooks/useSessionPlan'
 import { applyFilters, getUniqueValues, INITIAL_FILTERS } from './utils/filters'
+import { trackExerciseView, trackAddToSession, trackSessionPrint } from './utils/analytics'
 import FilterPanel from './components/FilterPanel'
 import ExerciseList from './components/ExerciseList'
 import ExerciseModal from './components/ExerciseModal'
@@ -39,6 +40,16 @@ export default function App() {
     }
     return applyFilters(list, filters)
   }, [exercises, filters, activeTab, favorites])
+
+  function openExercise(exercise) {
+    setSelectedExercise(exercise)
+    trackExerciseView(exercise)
+  }
+
+  function handleAddToSession(exercise) {
+    addToSession(exercise)
+    trackAddToSession(exercise)
+  }
 
   function updateFilter(key, value) {
     setFilters(prev => ({ ...prev, [key]: value }))
@@ -99,7 +110,8 @@ export default function App() {
               onMoveUp={moveUp}
               onMoveDown={moveDown}
               onClear={clearSession}
-              onSelectExercise={setSelectedExercise}
+              onSelectExercise={openExercise}
+              onPrint={() => trackSessionPrint(sessionExercises.length, totalDuration)}
             />
           ) : (
             <>
@@ -108,11 +120,11 @@ export default function App() {
               {!loading && !error && (
                 <ExerciseList
                   exercises={filteredExercises}
-                  onSelect={setSelectedExercise}
+                  onSelect={openExercise}
                   isFavorite={isFavorite}
                   onToggleFavorite={toggleFavorite}
                   isInSession={isInSession}
-                  onAddToSession={addToSession}
+                  onAddToSession={handleAddToSession}
                 />
               )}
             </>
@@ -127,7 +139,7 @@ export default function App() {
           isFavorite={isFavorite(selectedExercise.id)}
           onToggleFavorite={toggleFavorite}
           isInSession={isInSession(selectedExercise.id)}
-          onAddToSession={addToSession}
+          onAddToSession={handleAddToSession}
           onRemoveFromSession={removeFromSession}
         />
       )}

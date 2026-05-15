@@ -6,8 +6,10 @@ export default function SessionPanel({
   onMoveDown,
   onClear,
   onSelectExercise,
+  onPrint,
 }) {
   function handlePrint() {
+    onPrint?.()
     window.print()
   }
 
