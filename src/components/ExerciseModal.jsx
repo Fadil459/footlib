@@ -10,6 +10,8 @@ export default function ExerciseModal({
   isInSession,
   onAddToSession,
   onRemoveFromSession,
+  t,
+  lang,
 }) {
   useEffect(() => {
     function onKey(e) { if (e.key === 'Escape') onClose() }
@@ -21,31 +23,33 @@ export default function ExerciseModal({
   const schemaImageUrl = getSchemaImageUrl(exercise.id, exercise.schemaUrl)
   const hasVideo = Boolean(exercise.schemaVideo)
 
+  // Use EN content if available and lang === 'en'
+  const en = lang === 'en'
+  const titre = (en && exercise.titreEn) ? exercise.titreEn : exercise.titre
+
   return (
     <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true">
       <div className="modal-panel" onClick={e => e.stopPropagation()}>
         <button className="modal-close-btn" onClick={onClose} aria-label="Fermer">×</button>
 
-        {/* En-tête */}
         <header className="modal-header">
           <div className="modal-header-top">
             <span className="modal-id">{exercise.id}</span>
             <span className="modal-type">{exercise.type}</span>
           </div>
-          <h2 className="modal-title">{exercise.titre}</h2>
+          <h2 className="modal-title">{titre}</h2>
           <div className="modal-categories">
             {categories.map(cat => (
               <span key={cat} className="category-badge">{cat}</span>
             ))}
           </div>
 
-          {/* Actions */}
           <div className="modal-actions">
             <button
               className={`modal-action-btn ${isFavorite ? 'modal-action-btn--active' : ''}`}
               onClick={() => onToggleFavorite(exercise.id)}
             >
-              {isFavorite ? '★ Favori' : '☆ Ajouter aux favoris'}
+              {isFavorite ? `★ ${t.removeFavorite}` : `☆ ${t.addFavorite}`}
             </button>
 
             {isInSession ? (
@@ -53,56 +57,82 @@ export default function ExerciseModal({
                 className="modal-action-btn modal-action-btn--session-active"
                 onClick={() => onRemoveFromSession(exercise.id)}
               >
-                ✓ Dans la séance — Retirer
+                {t.removeFromSession}
               </button>
             ) : (
               <button
                 className="modal-action-btn modal-action-btn--session"
                 onClick={() => onAddToSession(exercise)}
               >
-                + Ajouter à la séance
+                {t.addToSession}
               </button>
             )}
           </div>
         </header>
 
-        {/* Corps */}
         <div className="modal-body">
-          {/* Infos rapides */}
           <div className="modal-quick-info">
-            <QuickInfo label="Durée" value={exercise.duree} />
-            <QuickInfo label="Séquence" value={exercise.sequence} />
-            <QuickInfo label="Effectif" value={exercise.effectif} />
-            <QuickInfo label="Terrain" value={
+            <QuickInfo label={t.duration} value={exercise.duree} />
+            <QuickInfo label={t.sequence} value={exercise.sequence} />
+            <QuickInfo label={t.players_label} value={exercise.effectif} />
+            <QuickInfo label={t.field} value={
               exercise.longueur && exercise.largeur
                 ? `${exercise.longueur} × ${exercise.largeur} m`
                 : exercise.longueur || exercise.largeur || null
             } />
-            <QuickInfo label="Phase" value={exercise.phase} />
-            <QuickInfo label="Principe" value={exercise.principe} />
-            <QuickInfo label="Méthode" value={exercise.methodePedagogique} />
+            <QuickInfo label={t.phase} value={exercise.phase} />
+            <QuickInfo label={t.principle} value={exercise.principe} />
+            <QuickInfo label={t.method} value={exercise.methodePedagogique} />
           </div>
 
-          <Section label="Objectif principal" value={exercise.objectifPrincipal} highlight />
-          <Section label="Consignes" value={exercise.consignes} />
-          <Section label="But(s)" value={exercise.buts} />
+          <Section
+            label={t.mainObjective}
+            value={(en && exercise.objectifPrincipalEn) ? exercise.objectifPrincipalEn : exercise.objectifPrincipal}
+            highlight
+          />
+          <Section
+            label={t.instructions}
+            value={(en && exercise.consignesEn) ? exercise.consignesEn : exercise.consignes}
+          />
+          <Section
+            label={t.goals}
+            value={(en && exercise.butsEn) ? exercise.butsEn : exercise.buts}
+          />
 
           <div className="modal-objectives">
-            <Section label="Objectifs techniques" value={exercise.objectifsTechniques} />
-            <Section label="Objectifs tactiques" value={exercise.objectifsTactiques} />
-            <Section label="Objectifs cognitifs" value={exercise.objectifsCognitifs} />
+            <Section
+              label={t.technicalObjectives}
+              value={(en && exercise.objectifsTechniquesEn) ? exercise.objectifsTechniquesEn : exercise.objectifsTechniques}
+            />
+            <Section
+              label={t.tacticalObjectives}
+              value={(en && exercise.objectifsTactiquesEn) ? exercise.objectifsTactiquesEn : exercise.objectifsTactiques}
+            />
+            <Section
+              label={t.cognitiveObjectives}
+              value={(en && exercise.objectifsCognitifsEn) ? exercise.objectifsCognitifsEn : exercise.objectifsCognitifs}
+            />
           </div>
 
           <div className="modal-variations">
-            <Section label="Simplifications" value={exercise.simplifications} />
-            <Section label="Complexifications" value={exercise.complexifications} />
+            <Section
+              label={t.simplifications}
+              value={(en && exercise.simplificationsEn) ? exercise.simplificationsEn : exercise.simplifications}
+            />
+            <Section
+              label={t.complexifications}
+              value={(en && exercise.complexificationsEn) ? exercise.complexificationsEn : exercise.complexifications}
+            />
           </div>
 
-          <Section label="Critère de réussite" value={exercise.critereReussite} />
+          <Section
+            label={t.successCriteria}
+            value={(en && exercise.critereReussiteEn) ? exercise.critereReussiteEn : exercise.critereReussite}
+          />
 
           {schemaImageUrl && (
             <div className="modal-schema">
-              <h3 className="modal-section-title">Schéma</h3>
+              <h3 className="modal-section-title">{t.schema}</h3>
               <img
                 src={schemaImageUrl}
                 alt={`Schéma de l'exercice ${exercise.id}`}
@@ -114,14 +144,14 @@ export default function ExerciseModal({
 
           {hasVideo && (
             <div className="modal-video">
-              <h3 className="modal-section-title">Vidéo</h3>
+              <h3 className="modal-section-title">{t.video}</h3>
               <a
                 href={exercise.schemaVideo}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="modal-video-link"
               >
-                Voir la vidéo →
+                {t.watchVideo}
               </a>
             </div>
           )}

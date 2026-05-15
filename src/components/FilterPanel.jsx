@@ -7,6 +7,7 @@ export default function FilterPanel({
   onReset,
   resultCount,
   totalCount,
+  t,
 }) {
   const activeCount = countActiveFilters(filters)
 
@@ -22,11 +23,11 @@ export default function FilterPanel({
     <div className="filter-panel">
       <div className="filter-panel-header">
         <span className="filter-result-count">
-          {resultCount} / {totalCount} exercices
+          {resultCount} / {totalCount} {t.exercises}
         </span>
         {activeCount > 0 && (
           <button className="filter-reset-btn" onClick={onReset}>
-            Réinitialiser ({activeCount})
+            {t.filterReset} ({activeCount})
           </button>
         )}
       </div>
@@ -35,35 +36,35 @@ export default function FilterPanel({
         <input
           type="search"
           className="filter-search-input"
-          placeholder="Rechercher un exercice…"
+          placeholder={t.filterSearch}
           value={filters.search}
           onChange={e => onUpdate('search', e.target.value)}
         />
       </div>
 
       <FilterGroup
-        title="Catégorie"
+        title={t.filterCategory}
         options={CATEGORIES}
         selected={filters.categories}
         onToggle={v => toggleArrayFilter('categories', v)}
       />
 
       <FilterGroup
-        title="Type"
+        title={t.filterType}
         options={filterOptions.types}
         selected={filters.types}
         onToggle={v => toggleArrayFilter('types', v)}
       />
 
       <FilterGroup
-        title="Phase de jeu"
+        title={t.filterPhase}
         options={filterOptions.phases}
         selected={filters.phases}
         onToggle={v => toggleArrayFilter('phases', v)}
       />
 
       <FilterGroup
-        title="Principe de jeu"
+        title={t.filterPrinciple}
         options={filterOptions.principes}
         selected={filters.principes}
         onToggle={v => toggleArrayFilter('principes', v)}

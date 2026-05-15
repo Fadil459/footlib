@@ -48,6 +48,18 @@ const COLUMN_MAP = {
   'Statut schéma': 'statutSchema',
   'Schema video': 'schemaVideo',
   'Schéma vidéo': 'schemaVideo',
+  // Colonnes EN
+  'Titre EN': 'titreEn',
+  'Objectif principal EN': 'objectifPrincipalEn',
+  'Consignes EN': 'consignesEn',
+  'But(s) EN': 'butsEn',
+  'Objectifs techniques EN': 'objectifsTechniquesEn',
+  'Objectifs tactiques EN': 'objectifsTactiquesEn',
+  'Objectifs cognitifs EN': 'objectifsCognitifsEn',
+  'Simplifications EN': 'simplificationsEn',
+  'Complexifications EN': 'complexificationsEn',
+  'Critere de reussite EN': 'critereReussiteEn',
+  'Critère de réussite EN': 'critereReussiteEn',
 }
 
 const BOOLEAN_KEYS = new Set(['u9','u10','u11','u12','u13','u14','u15','u16','u17'])

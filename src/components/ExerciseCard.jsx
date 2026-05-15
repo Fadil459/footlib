@@ -1,10 +1,13 @@
 import { CATEGORIES } from '../utils/filters'
 import { getSchemaImageUrl } from '../data/driveSchemas'
 
-export default function ExerciseCard({ exercise, onClick, isFavorite, onToggleFavorite, isInSession, onAddToSession }) {
+export default function ExerciseCard({ exercise, onClick, isFavorite, onToggleFavorite, isInSession, onAddToSession, t, lang }) {
   const categories = CATEGORIES.filter(cat => exercise[cat.toLowerCase()] === true)
   const hasSchema = Boolean(getSchemaImageUrl(exercise.id, exercise.schemaUrl))
   const hasVideo = Boolean(exercise.schemaVideo)
+
+  const titre = (lang === 'en' && exercise.titreEn) ? exercise.titreEn : exercise.titre
+  const objectif = (lang === 'en' && exercise.objectifPrincipalEn) ? exercise.objectifPrincipalEn : exercise.objectifPrincipal
 
   function handleFavorite(e) {
     e.stopPropagation()
@@ -25,8 +28,8 @@ export default function ExerciseCard({ exercise, onClick, isFavorite, onToggleFa
           <button
             className={`card-favorite-btn ${isFavorite ? 'card-favorite-btn--active' : ''}`}
             onClick={handleFavorite}
-            aria-label={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
-            title={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+            aria-label={isFavorite ? t.removeFavorite : t.addFavorite}
+            title={isFavorite ? t.removeFavorite : t.addFavorite}
           >
             {isFavorite ? '★' : '☆'}
           </button>
@@ -34,15 +37,15 @@ export default function ExerciseCard({ exercise, onClick, isFavorite, onToggleFa
         </div>
       </div>
 
-      <h2 className="card-title">{exercise.titre}</h2>
+      <h2 className="card-title">{titre}</h2>
 
-      {exercise.objectifPrincipal && (
-        <p className="card-objective">{exercise.objectifPrincipal}</p>
+      {objectif && (
+        <p className="card-objective">{objectif}</p>
       )}
 
       <div className="card-meta">
         {exercise.duree && <span className="card-meta-item">{exercise.duree}</span>}
-        {exercise.effectif && <span className="card-meta-item">{exercise.effectif} joueurs</span>}
+        {exercise.effectif && <span className="card-meta-item">{exercise.effectif} {t.players}</span>}
         {exercise.longueur && exercise.largeur && (
           <span className="card-meta-item">{exercise.longueur}×{exercise.largeur} m</span>
         )}
@@ -56,16 +59,16 @@ export default function ExerciseCard({ exercise, onClick, isFavorite, onToggleFa
         </div>
         <div className="card-footer-right">
           <div className="card-media-badges">
-            {hasSchema && <span className="media-badge media-badge-schema">Schéma</span>}
-            {hasVideo && <span className="media-badge media-badge-video">Vidéo</span>}
+            {hasSchema && <span className="media-badge media-badge-schema">{t.schema}</span>}
+            {hasVideo && <span className="media-badge media-badge-video">{t.video}</span>}
           </div>
           <button
             className={`card-session-btn ${isInSession ? 'card-session-btn--active' : ''}`}
             onClick={handleAddToSession}
-            aria-label={isInSession ? 'Déjà dans la séance' : 'Ajouter à la séance'}
-            title={isInSession ? 'Déjà dans la séance' : 'Ajouter à la séance'}
+            aria-label={isInSession ? t.inSession : t.addSession}
+            title={isInSession ? t.inSession : t.addSession}
           >
-            {isInSession ? '✓ Séance' : '+ Séance'}
+            {isInSession ? t.inSession : t.addSession}
           </button>
         </div>
       </div>
