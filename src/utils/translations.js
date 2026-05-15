@@ -1,7 +1,7 @@
 export const translations = {
   fr: {
     // Header
-    appTitle: "Bibliothèque d'exercices de football",
+    appTitle: "FootLib",
     tabExercises: "Exercices",
     tabFavorites: "Favoris",
     tabSession: "Séance",
@@ -66,7 +66,7 @@ export const translations = {
 
   en: {
     // Header
-    appTitle: "Football Exercise Library",
+    appTitle: "FootLib",
     tabExercises: "Exercises",
     tabFavorites: "Favorites",
     tabSession: "Session",

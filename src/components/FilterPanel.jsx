@@ -24,7 +24,7 @@ export default function FilterPanel({
     <div className="filter-panel">
       <div className="filter-panel-header">
         <span className="filter-result-count">
-          {resultCount} / {totalCount} {t.exercises}
+          {resultCount} / {totalCount}
         </span>
         {activeCount > 0 && (
           <button className="filter-reset-btn" onClick={onReset}>

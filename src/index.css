@@ -101,12 +101,9 @@ body {
   font-size: 13px;
   font-weight: 800;
   border-radius: 4px;
-  transform: rotate(45deg);
   flex-shrink: 0;
   letter-spacing: 0;
 }
-
-.app-title::before + * { transform: rotate(-45deg); }
 
 /* "Lib" en gold */
 .app-title span { color: var(--gold); }
