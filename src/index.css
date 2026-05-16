@@ -119,10 +119,9 @@ body {
   pointer-events: none;
 }
 
-/* "Lib" en couleur du losange */
-.app-title span { color: var(--gold); }
-
-/* On remplace le texte brut par span dans l'App — en attendant on stylise directement */
+/* Wordmark : un seul flex item pour éviter le gap entre "Foot" et "Lib" */
+.app-wordmark { color: #fff; }
+.app-lib { color: var(--gold); }
 
 /* Langue toggle */
 .lang-toggle {
@@ -1293,6 +1292,9 @@ body {
   .exercise-list { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* Contenu impression — masqué à l'écran */
+.print-exercise { display: none; }
+
 /* ── Print ───────────────────────────────────────────────── */
 @media print {
   .app-header,
@@ -1303,17 +1305,58 @@ body {
   .modal-overlay,
   .filter-sheet-overlay,
   .session-actions,
-  .session-move-btn,
+  .session-item-order,
+  .session-item-info,
   .session-remove-btn {
     display: none !important;
   }
 
-  body { background: #fff; font-size: 12pt; }
+  body { background: #fff; font-size: 11pt; font-family: Georgia, serif; }
 
   .app-body { display: block; }
   .app-content { padding: 0; }
 
   .session-panel { max-width: 100%; }
-  .session-title { color: var(--navy); font-size: 18pt; }
-  .session-item { break-inside: avoid; border: 1px solid #ccc; margin-bottom: 6px; }
+  .session-title { color: #14315a; font-size: 20pt; margin-bottom: 4pt; }
+  .session-count { font-size: 11pt; color: #555; }
+  .session-duration { font-size: 10pt; color: #333; margin-bottom: 16pt; border-bottom: 1px solid #ccc; padding-bottom: 8pt; }
+
+  .session-list { list-style: none; padding: 0; margin: 0; }
+  .session-item { display: block; border: none; padding: 0; margin: 0 0 24pt; }
+  .session-item + .session-item { border-top: 2px solid #14315a; padding-top: 20pt; }
+
+  .print-exercise { display: block; }
+
+  /* En-tête exercice */
+  .print-ex { font-family: Arial, sans-serif; }
+  .print-ex-header { display: flex; align-items: flex-start; gap: 12pt; margin-bottom: 8pt; }
+  .print-ex-num { font-size: 22pt; font-weight: 700; color: #14315a; line-height: 1; min-width: 28pt; }
+  .print-ex-header-info { flex: 1; }
+  .print-ex-meta-row { display: flex; gap: 6pt; align-items: center; flex-wrap: wrap; margin-bottom: 3pt; }
+  .print-ex-id { font-size: 9pt; color: #888; letter-spacing: 1pt; }
+  .print-ex-type { font-size: 8pt; font-weight: 700; color: #4a7a5a; background: #e8f2eb; padding: 1pt 5pt; border-radius: 3pt; text-transform: uppercase; letter-spacing: 0.5pt; }
+  .print-ex-cat { font-size: 8pt; font-weight: 600; color: #14315a; background: #e8edf5; padding: 1pt 5pt; border-radius: 3pt; }
+  .print-ex-title { font-size: 15pt; font-weight: 700; color: #0e1d33; margin: 0; line-height: 1.2; }
+
+  /* Infos rapides */
+  .print-ex-quickinfo { display: flex; flex-wrap: wrap; gap: 6pt 16pt; background: #f5f3ee; padding: 6pt 10pt; border-radius: 4pt; margin-bottom: 10pt; }
+  .print-ex-info-item { display: flex; gap: 4pt; align-items: baseline; }
+  .print-ex-info-label { font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5pt; color: #666; }
+  .print-ex-info-value { font-size: 9pt; color: #222; }
+
+  /* Sections */
+  .print-ex-section { margin-bottom: 7pt; }
+  .print-ex-section--highlight { border-left: 3pt solid #4a7a5a; background: #f0f6f1; padding: 5pt 8pt; border-radius: 0 3pt 3pt 0; margin-bottom: 8pt; }
+  .print-ex-label { display: block; font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5pt; color: #888; margin-bottom: 2pt; }
+  .print-ex-section--highlight .print-ex-label { color: #4a7a5a; }
+  .print-ex-value { display: block; font-size: 9.5pt; color: #222; line-height: 1.4; white-space: pre-wrap; }
+
+  /* Grilles objectives/variations */
+  .print-ex-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8pt; margin-bottom: 8pt; }
+  .print-ex-grid .print-ex-section { border: 1pt solid #ddd; border-radius: 3pt; padding: 5pt 7pt; margin-bottom: 0; }
+  .print-ex-grid .print-ex-label { color: #14315a; }
+
+  /* Schéma */
+  .print-ex-schema { margin-top: 10pt; }
+  .print-ex-schema-img { width: 100%; max-width: 480pt; height: auto; border: 1pt solid #ddd; border-radius: 4pt; margin-top: 4pt; }
 }

@@ -87,7 +87,7 @@ export default function App() {
       {/* Header */}
       <header className="app-header">
         <div className="app-header-inner">
-          <h1 className="app-title">Foot<span>Lib</span></h1>
+          <h1 className="app-title"><span className="app-wordmark">Foot<span className="app-lib">Lib</span></span></h1>
           <button
             className="lang-toggle"
             onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')}
