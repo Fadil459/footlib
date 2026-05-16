@@ -143,6 +143,7 @@ export default function App() {
               resultCount={filteredExercises.length}
               totalCount={totalCount}
               t={t}
+              lang={lang}
             />
           </aside>
         )}

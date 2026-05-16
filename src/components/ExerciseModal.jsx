@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { CATEGORIES } from '../utils/filters'
 import { getSchemaImageUrl } from '../data/driveSchemas'
+import { translateField } from '../utils/fieldTranslations'
 
 export default function ExerciseModal({
   exercise,
@@ -35,7 +36,7 @@ export default function ExerciseModal({
         <header className="modal-header">
           <div className="modal-header-top">
             <span className="modal-id">{exercise.id}</span>
-            <span className="modal-type">{exercise.type}</span>
+            <span className="modal-type">{translateField(exercise.type, lang)}</span>
           </div>
           <h2 className="modal-title">{titre}</h2>
           <div className="modal-categories">
@@ -80,9 +81,9 @@ export default function ExerciseModal({
                 ? `${exercise.longueur} × ${exercise.largeur} m`
                 : exercise.longueur || exercise.largeur || null
             } />
-            <QuickInfo label={t.phase} value={exercise.phase} />
-            <QuickInfo label={t.principle} value={exercise.principe} />
-            <QuickInfo label={t.method} value={exercise.methodePedagogique} />
+            <QuickInfo label={t.phase} value={translateField(exercise.phase, lang)} />
+            <QuickInfo label={t.principle} value={translateField(exercise.principe, lang)} />
+            <QuickInfo label={t.method} value={translateField(exercise.methodePedagogique, lang)} />
           </div>
 
           <Section

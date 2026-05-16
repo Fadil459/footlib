@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CATEGORIES, countActiveFilters } from '../utils/filters'
+import { translateField } from '../utils/fieldTranslations'
 
 export default function FilterPanel({
   filters,
@@ -9,6 +10,7 @@ export default function FilterPanel({
   resultCount,
   totalCount,
   t,
+  lang,
 }) {
   const activeCount = countActiveFilters(filters)
 
@@ -64,7 +66,7 @@ export default function FilterPanel({
         >
           <option value="">— {t.filterType} —</option>
           {filterOptions.types.map(opt => (
-            <option key={opt} value={opt}>{opt}</option>
+            <option key={opt} value={opt}>{translateField(opt, lang)}</option>
           ))}
         </select>
       </div>
@@ -79,7 +81,7 @@ export default function FilterPanel({
         >
           <option value="">— {t.filterPhase} —</option>
           {filterOptions.phases.map(opt => (
-            <option key={opt} value={opt}>{opt}</option>
+            <option key={opt} value={opt}>{translateField(opt, lang)}</option>
           ))}
         </select>
       </div>
@@ -94,7 +96,7 @@ export default function FilterPanel({
         >
           <option value="">— {t.filterPrinciple} —</option>
           {filterOptions.principes.map(opt => (
-            <option key={opt} value={opt}>{opt}</option>
+            <option key={opt} value={opt}>{translateField(opt, lang)}</option>
           ))}
         </select>
       </div>

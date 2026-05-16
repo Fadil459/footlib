@@ -1,5 +1,6 @@
 import { CATEGORIES } from '../utils/filters'
 import { getSchemaImageUrl } from '../data/driveSchemas'
+import { translateField } from '../utils/fieldTranslations'
 
 export default function ExerciseCard({ exercise, onClick, isFavorite, onToggleFavorite, isInSession, onAddToSession, t, lang }) {
   const categories = CATEGORIES.filter(cat => exercise[cat.toLowerCase()] === true)
@@ -33,7 +34,7 @@ export default function ExerciseCard({ exercise, onClick, isFavorite, onToggleFa
           >
             {isFavorite ? '★' : '☆'}
           </button>
-          <span className="card-type">{exercise.type}</span>
+          <span className="card-type">{translateField(exercise.type, lang)}</span>
         </div>
       </div>
 
