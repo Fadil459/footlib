@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useExercises } from './hooks/useExercises'
 import { useFavorites } from './hooks/useFavorites'
 import { useSessionPlan } from './hooks/useSessionPlan'
@@ -32,6 +32,16 @@ export default function App() {
 
   const t = useTranslation(lang)
   const activeFilterCount = countActiveFilters(filters)
+
+  useEffect(() => {
+    if (exercises.length === 0) return
+    const params = new URLSearchParams(window.location.search)
+    const exId = params.get('ex')
+    if (exId) {
+      const found = exercises.find(ex => ex.id === exId)
+      if (found) openExercise(found)
+    }
+  }, [exercises])
 
   const filterOptions = useMemo(() => ({
     phases: getUniqueValues(exercises, 'phase'),

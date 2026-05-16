@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { CATEGORIES } from '../utils/filters'
 import { getSchemaImageUrl } from '../data/driveSchemas'
 import { translateField } from '../utils/fieldTranslations'
@@ -23,6 +23,16 @@ export default function ExerciseModal({
   const categories = CATEGORIES.filter(cat => exercise[cat.toLowerCase()] === true)
   const schemaImageUrl = getSchemaImageUrl(exercise.id, exercise.schemaUrl)
   const hasVideo = Boolean(exercise.schemaVideo)
+
+  const [copied, setCopied] = useState(false)
+
+  function handleShare() {
+    const url = `${window.location.origin}${window.location.pathname}?ex=${exercise.id}`
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
 
   // Use EN content if available and lang === 'en'
   const en = lang === 'en'
@@ -51,6 +61,10 @@ export default function ExerciseModal({
               onClick={() => onToggleFavorite(exercise.id)}
             >
               {isFavorite ? `★ ${t.removeFavorite}` : `☆ ${t.addFavorite}`}
+            </button>
+
+            <button className="modal-action-btn modal-action-btn--share" onClick={handleShare}>
+              {copied ? t.linkCopied : `↗ ${t.share}`}
             </button>
 
             {isInSession ? (

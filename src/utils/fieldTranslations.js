@@ -1,7 +1,7 @@
 // Traduction des valeurs contrôlées du sheet FR → EN
 const FIELD_TRANSLATIONS = {
   // Type
-  'Jeu': 'Game/SSD/MSG',
+  'Jeu': 'Game/SSG/MSG',
   'Situation': 'Wave',
   'Exercice': 'Drill',
   'Coordination': 'Coordination',

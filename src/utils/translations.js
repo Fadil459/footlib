@@ -57,6 +57,10 @@ export const translations = {
     printSession: "Imprimer / Enregistrer PDF",
     clearSession: "Vider la séance",
 
+    // Partage
+    share: "Partager",
+    linkCopied: "Lien copié !",
+
     // États
     loading: "Chargement des exercices…",
     noResults: "Aucun exercice ne correspond aux filtres sélectionnés.",
@@ -121,6 +125,10 @@ export const translations = {
     notCalculable: "Not calculable",
     printSession: "Print / Save as PDF",
     clearSession: "Clear session",
+
+    // Share
+    share: "Share",
+    linkCopied: "Link copied!",
 
     // States
     loading: "Loading exercises…",
