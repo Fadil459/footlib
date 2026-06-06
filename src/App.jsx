@@ -9,6 +9,7 @@ import FilterPanel from './components/FilterPanel'
 import ExerciseList from './components/ExerciseList'
 import ExerciseModal from './components/ExerciseModal'
 import SessionPanel from './components/SessionPanel'
+import TermsModal from './components/TermsModal'
 
 export default function App() {
   const { exercises, loading, error } = useExercises()
@@ -29,6 +30,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('exercises')
   const [lang, setLang] = useState('fr')
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const [showTerms, setShowTerms] = useState(false)
 
   const t = useTranslation(lang)
   const activeFilterCount = countActiveFilters(filters)
@@ -202,6 +204,16 @@ export default function App() {
         </main>
       </div>
 
+      {/* Pied de page */}
+      <footer className="app-footer">
+        <span className="app-footer-credit">
+          © {new Date().getFullYear()} fadilsoccersaga — {t.rightsReserved}
+        </span>
+        <button className="app-footer-link" onClick={() => setShowTerms(true)}>
+          {t.termsLink}
+        </button>
+      </footer>
+
       {/* Bottom nav mobile */}
       <nav className="bottom-nav mobile-only">
         <button className={`bottom-nav-item ${activeTab === 'exercises' ? 'bottom-nav-item--active' : ''}`} onClick={() => setActiveTab('exercises')}>
@@ -266,6 +278,8 @@ export default function App() {
           lang={lang}
         />
       )}
+
+      {showTerms && <TermsModal onClose={() => setShowTerms(false)} t={t} />}
     </div>
   )
 }

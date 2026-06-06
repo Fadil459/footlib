@@ -1167,6 +1167,45 @@ body {
 .mobile-only  { display: none; }
 
 /* ── Bottom nav mobile ───────────────────────────────────── */
+/* Pied de page */
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 14px;
+  flex-wrap: wrap;
+  padding: 16px 18px;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+}
+.app-footer-credit {
+  font-size: 11px;
+  color: var(--mute);
+  letter-spacing: 0.2px;
+}
+.app-footer-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 11px;
+  color: var(--navy);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.app-footer-link:hover { color: var(--pitch); }
+
+/* Modale Conditions d'utilisation */
+.modal-panel--terms { max-width: 560px; }
+.terms-title { margin-bottom: 14px; }
+.terms-body p {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin-bottom: 11px;
+}
+.terms-body p:last-child { margin-bottom: 0; }
+
 .bottom-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -1345,7 +1384,9 @@ body {
   .app-title::before { width: 24px; height: 24px; }
   .app-title::after { width: 24px; font-size: 11px; }
 
-  .app-body { flex-direction: column; padding-bottom: 64px; }
+  .app-body { flex-direction: column; padding-bottom: 16px; }
+
+  .app-footer { margin-bottom: 64px; }
 
   .app-content { padding: 12px 14px; }
 

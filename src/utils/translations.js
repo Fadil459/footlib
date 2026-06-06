@@ -68,6 +68,18 @@ export const translations = {
     noResults: "Aucun exercice ne correspond aux filtres sélectionnés.",
     noFavorites: "Aucun favori enregistré. Cliquez sur ★ pour ajouter un exercice.",
     noNew: "Aucun nouvel exercice pour le moment.",
+
+    // Pied de page / Légal
+    close: "Fermer",
+    rightsReserved: "Tous droits réservés.",
+    termsLink: "Conditions d'utilisation",
+    termsTitle: "Conditions d'utilisation",
+    termsBody: [
+      "L'ensemble du contenu de FootLib — exercices, descriptions, schémas, traductions et code de l'application — est la propriété de fadilsoccersaga et est protégé par le droit d'auteur.",
+      "L'accès est fourni à des fins de consultation personnelle par les entraîneurs autorisés. Toute reproduction, distribution, modification ou utilisation commerciale, totale ou partielle, sans autorisation écrite préalable est interdite.",
+      "Il est notamment interdit de copier ce contenu et de se l'attribuer ou d'en revendiquer la paternité.",
+      "Pour toute demande d'autorisation, contactez fadilsoccersaga.",
+    ],
   },
 
   en: {
@@ -139,6 +151,18 @@ export const translations = {
     noResults: "No exercises match the selected filters.",
     noFavorites: "No favorites saved. Click ★ to add an exercise.",
     noNew: "No new exercises at the moment.",
+
+    // Footer / Legal
+    close: "Close",
+    rightsReserved: "All rights reserved.",
+    termsLink: "Terms of use",
+    termsTitle: "Terms of use",
+    termsBody: [
+      "All FootLib content — exercises, descriptions, diagrams, translations and the application code — is the property of fadilsoccersaga and is protected by copyright.",
+      "Access is provided for personal consultation by authorized coaches. Any reproduction, distribution, modification or commercial use, in whole or in part, without prior written permission is prohibited.",
+      "In particular, copying this content and claiming authorship of it is prohibited.",
+      "For any permission request, contact fadilsoccersaga.",
+    ],
   },
 }
 
