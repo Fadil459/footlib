@@ -100,50 +100,48 @@ export default function ExerciseModal({
             <QuickInfo label={t.method} value={translateField(exercise.methodePedagogique, lang)} />
           </div>
 
-          <Section
-            label={t.mainObjective}
-            value={(en && exercise.objectifPrincipalEn) ? exercise.objectifPrincipalEn : exercise.objectifPrincipal}
-            highlight
-          />
-          <Section
-            label={t.instructions}
-            value={(en && exercise.consignesEn) ? exercise.consignesEn : exercise.consignes}
-          />
-          <Section
-            label={t.goals}
-            value={(en && exercise.butsEn) ? exercise.butsEn : exercise.buts}
-          />
-
-          <div className="modal-objectives">
-            <Section
-              label={t.technicalObjectives}
-              value={(en && exercise.objectifsTechniquesEn) ? exercise.objectifsTechniquesEn : exercise.objectifsTechniques}
-            />
-            <Section
-              label={t.tacticalObjectives}
-              value={(en && exercise.objectifsTactiquesEn) ? exercise.objectifsTactiquesEn : exercise.objectifsTactiques}
-            />
-            <Section
-              label={t.cognitiveObjectives}
-              value={(en && exercise.objectifsCognitifsEn) ? exercise.objectifsCognitifsEn : exercise.objectifsCognitifs}
-            />
-          </div>
-
-          <div className="modal-variations">
-            <Section
-              label={t.simplifications}
-              value={(en && exercise.simplificationsEn) ? exercise.simplificationsEn : exercise.simplifications}
-            />
-            <Section
-              label={t.complexifications}
-              value={(en && exercise.complexificationsEn) ? exercise.complexificationsEn : exercise.complexifications}
-            />
-          </div>
-
-          <Section
-            label={t.successCriteria}
-            value={(en && exercise.critereReussiteEn) ? exercise.critereReussiteEn : exercise.critereReussite}
-          />
+          {(() => {
+            const objectifPrincipal = (en && exercise.objectifPrincipalEn) ? exercise.objectifPrincipalEn : exercise.objectifPrincipal
+            const consignes = (en && exercise.consignesEn) ? exercise.consignesEn : exercise.consignes
+            const buts = (en && exercise.butsEn) ? exercise.butsEn : exercise.buts
+            const oTech = (en && exercise.objectifsTechniquesEn) ? exercise.objectifsTechniquesEn : exercise.objectifsTechniques
+            const oTact = (en && exercise.objectifsTactiquesEn) ? exercise.objectifsTactiquesEn : exercise.objectifsTactiques
+            const oCog = (en && exercise.objectifsCognitifsEn) ? exercise.objectifsCognitifsEn : exercise.objectifsCognitifs
+            const simpl = (en && exercise.simplificationsEn) ? exercise.simplificationsEn : exercise.simplifications
+            const compl = (en && exercise.complexificationsEn) ? exercise.complexificationsEn : exercise.complexifications
+            const critere = (en && exercise.critereReussiteEn) ? exercise.critereReussiteEn : exercise.critereReussite
+            const hasObjectives = Boolean(oTech || oTact || oCog)
+            const hasVariations = Boolean(simpl || compl)
+            return (
+              <>
+                <Accordion label={t.mainObjective} defaultOpen highlight show={Boolean(objectifPrincipal)}>
+                  <div className="modal-section-value">{objectifPrincipal}</div>
+                </Accordion>
+                <Accordion label={t.instructions} defaultOpen show={Boolean(consignes)}>
+                  <div className="modal-section-value">{consignes}</div>
+                </Accordion>
+                <Accordion label={t.goals} show={Boolean(buts)}>
+                  <div className="modal-section-value">{buts}</div>
+                </Accordion>
+                <Accordion label={t.objectivesGroup} show={hasObjectives}>
+                  <div className="modal-objectives">
+                    <Section label={t.technicalObjectives} value={oTech} />
+                    <Section label={t.tacticalObjectives} value={oTact} />
+                    <Section label={t.cognitiveObjectives} value={oCog} />
+                  </div>
+                </Accordion>
+                <Accordion label={t.variationsGroup} show={hasVariations}>
+                  <div className="modal-variations">
+                    <Section label={t.simplifications} value={simpl} />
+                    <Section label={t.complexifications} value={compl} />
+                  </div>
+                </Accordion>
+                <Accordion label={t.successCriteria} show={Boolean(critere)}>
+                  <div className="modal-section-value">{critere}</div>
+                </Accordion>
+              </>
+            )
+          })()}
 
           {schemaImageUrl && (
             <div className="modal-schema">
@@ -173,6 +171,19 @@ export default function ExerciseModal({
         </div>
       </div>
     </div>
+  )
+}
+
+function Accordion({ label, children, defaultOpen = false, highlight = false, show = true }) {
+  if (!show) return null
+  return (
+    <details className={`modal-acc ${highlight ? 'modal-acc-highlight' : ''}`} open={defaultOpen}>
+      <summary className="modal-acc-summary">
+        <span className="modal-acc-label">{label}</span>
+        <span className="modal-acc-chevron" aria-hidden="true">▾</span>
+      </summary>
+      <div className="modal-acc-content">{children}</div>
+    </details>
   )
 }
 

@@ -457,6 +457,36 @@ body {
 }
 .exercise-card:focus { outline: 2px solid var(--navy); outline-offset: 2px; }
 
+.card-schema-thumb {
+  margin: -12px -13px 10px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  overflow: hidden;
+  background: var(--bg-2, #f3f5f8);
+  aspect-ratio: 16 / 9;
+}
+.card-schema-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.card-schema-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    repeating-linear-gradient(45deg, rgba(20,49,90,.04) 0 10px, rgba(20,49,90,.07) 10px 20px);
+}
+.card-schema-placeholder span {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--mute);
+  font-weight: 600;
+}
+
 .card-top {
   display: flex;
   justify-content: space-between;
@@ -875,6 +905,52 @@ body {
   margin-bottom: 8px;
   color: var(--ink);
 }
+
+/* Accordéon (sections texte repliables) */
+.modal-acc {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  background: var(--card);
+  overflow: hidden;
+}
+.modal-acc-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.modal-acc-summary::-webkit-details-marker { display: none; }
+.modal-acc-summary:hover { background: rgba(20,49,90,.03); }
+.modal-acc-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--navy);
+}
+.modal-acc-chevron {
+  font-size: 11px;
+  color: var(--mute);
+  transition: transform .18s ease;
+}
+.modal-acc[open] > .modal-acc-summary .modal-acc-chevron { transform: rotate(180deg); }
+.modal-acc-content {
+  padding: 0 12px 12px;
+}
+.modal-acc-highlight {
+  border-color: rgba(74,122,90,.35);
+  background: rgba(74,122,90,.05);
+}
+.modal-acc-highlight .modal-acc-label { color: var(--pitch); }
+/* À l'intérieur d'un accordéon, les sous-sections groupées n'ont plus de cadre propre */
+.modal-acc-content .modal-objectives,
+.modal-acc-content .modal-variations { margin: 0; }
 
 /* Schéma */
 .modal-schema {

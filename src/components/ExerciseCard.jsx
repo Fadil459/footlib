@@ -1,11 +1,15 @@
+import { useState } from 'react'
 import { CATEGORIES } from '../utils/filters'
 import { getSchemaImageUrl } from '../data/driveSchemas'
 import { translateField } from '../utils/fieldTranslations'
 
 export default function ExerciseCard({ exercise, onClick, isFavorite, onToggleFavorite, isInSession, onAddToSession, t, lang }) {
   const categories = CATEGORIES.filter(cat => exercise[cat.toLowerCase()] === true)
-  const hasSchema = Boolean(getSchemaImageUrl(exercise.id, exercise.schemaUrl))
+  const schemaThumb = getSchemaImageUrl(exercise.id, exercise.schemaUrl, 'w400')
+  const hasSchema = Boolean(schemaThumb)
   const hasVideo = Boolean(exercise.schemaVideo)
+  const [imgError, setImgError] = useState(false)
+  const showImage = hasSchema && !imgError
 
   const titre = (lang === 'en' && exercise.titreEn) ? exercise.titreEn : exercise.titre
   const objectif = (lang === 'en' && exercise.objectifPrincipalEn) ? exercise.objectifPrincipalEn : exercise.objectifPrincipal
@@ -23,6 +27,22 @@ export default function ExerciseCard({ exercise, onClick, isFavorite, onToggleFa
   return (
     <article className="exercise-card" onClick={onClick} role="button" tabIndex={0}
       onKeyDown={e => e.key === 'Enter' && onClick()}>
+      <div className="card-schema-thumb">
+        {showImage ? (
+          <img
+            src={schemaThumb}
+            alt=""
+            className="card-schema-img"
+            loading="lazy"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="card-schema-placeholder" aria-hidden="true">
+            <span>{exercise.id}</span>
+          </div>
+        )}
+      </div>
+
       <div className="card-top">
         <span className="card-id">{exercise.id}</span>
         <div className="card-top-actions">

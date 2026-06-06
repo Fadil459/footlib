@@ -2,6 +2,8 @@
 // Mis à jour le 2026-05-15 — 53 schémas disponibles sur 56
 // Manquants: EX001, EX011, EX017
 
+import { LOCAL_SCHEMA_IDS } from './schemaManifest'
+
 export const DRIVE_SCHEMA_IDS = {
   EX002: '1QqMdg5KWekCuwJyoxljCzXKdVaPcCXyZ',
   EX003: '1Ad30xkECTe5SL_XdazCwQWItT7MLlQ9B',
@@ -80,18 +82,24 @@ export function extractDriveFileId(value) {
 }
 
 // Retourne l'URL d'affichage de l'image pour un exercice donné.
-// Priorité : 1) mapping hard-codé, 2) colonne schemaUrl du sheet
-export function getSchemaImageUrl(exerciseId, schemaUrlFromSheet) {
-  // 1. Mapping hard-codé (exercices existants)
-  const hardCodedId = DRIVE_SCHEMA_IDS[exerciseId]
-  if (hardCodedId) {
-    return `https://drive.google.com/thumbnail?id=${hardCodedId}&sz=w1200`
+// Priorité : 1) image hébergée localement (public/schemas), 2) mapping Drive hard-codé,
+// 3) colonne schemaUrl du sheet (Drive, secours pour les nouveaux exercices pas encore bundlés)
+export function getSchemaImageUrl(exerciseId, schemaUrlFromSheet, size = 'w1200') {
+  // 1. Image locale hébergée dans l'app (rapide, fiable, sans quota Drive)
+  if (exerciseId && LOCAL_SCHEMA_IDS.has(exerciseId)) {
+    return `${import.meta.env.BASE_URL}schemas/${exerciseId}.png`
   }
 
-  // 2. Colonne schemaUrl du sheet (nouveaux exercices)
+  // 2. Mapping hard-codé Drive (anciens exercices non encore bundlés)
+  const hardCodedId = DRIVE_SCHEMA_IDS[exerciseId]
+  if (hardCodedId) {
+    return `https://drive.google.com/thumbnail?id=${hardCodedId}&sz=${size}`
+  }
+
+  // 3. Colonne schemaUrl du sheet (nouveaux exercices ajoutés via Drive)
   const extractedId = extractDriveFileId(schemaUrlFromSheet)
   if (extractedId) {
-    return `https://drive.google.com/thumbnail?id=${extractedId}&sz=w1200`
+    return `https://drive.google.com/thumbnail?id=${extractedId}&sz=${size}`
   }
 
   return null
