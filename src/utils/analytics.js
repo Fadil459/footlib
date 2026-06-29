@@ -1,6 +1,8 @@
 // Envoie un événement à Google Analytics 4
 // Ne plante pas si GA n'est pas chargé (ex: en local)
 function trackEvent(eventName, params = {}) {
+  // Opt-out interne (voir index.html) : ne rien envoyer depuis cet appareil.
+  if (window.__footlibNoTrack) return
   if (typeof window.gtag === 'function') {
     window.gtag('event', eventName, params)
   }

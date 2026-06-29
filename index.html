@@ -6,6 +6,30 @@
     <title>FootLib</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <!-- Google Analytics -->
+    <script>
+      // Opt-out interne par appareil.
+      //   .../?notrack=1  -> desactive le suivi GA sur cet appareil (durable)
+      //   .../?notrack=0  -> reactive le suivi
+      // Le marqueur est stocke dans le navigateur (localStorage), independant de l'IP.
+      (function () {
+        var GA_ID = 'G-DS5RL3EKEK';
+        try {
+          var p = new URLSearchParams(window.location.search);
+          if (p.has('notrack')) {
+            if (p.get('notrack') === '0') localStorage.removeItem('footlib_notrack');
+            else localStorage.setItem('footlib_notrack', '1');
+          }
+        } catch (e) {}
+        var optedOut = false;
+        try { optedOut = localStorage.getItem('footlib_notrack') === '1'; } catch (e) {}
+        // Doit etre pose AVANT le chargement de gtag pour bloquer aussi la 1re vue.
+        if (optedOut) {
+          window['ga-disable-' + GA_ID] = true;
+          console.info('[FootLib] Suivi Google Analytics desactive sur cet appareil (notrack).');
+        }
+        window.__footlibNoTrack = optedOut;
+      })();
+    </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DS5RL3EKEK"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
